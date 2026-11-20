@@ -90,7 +90,7 @@ is destroyed too, on the next frame.
 
 ## Requirements
 
-RemoteTech (built against 1.9.12, not yet tested in game) and Harmony (`000_Harmony`).
+RemoteTech (tested in game with 1.9.12) and Harmony (`000_Harmony`).
 
 ## Install
 
