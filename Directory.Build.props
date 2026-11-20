@@ -1,0 +1,14 @@
+<Project>
+
+  <!-- Machine-specific overrides (gitignored): set KSPBT_GameRoot and KSPBT_ManagedPath here. -->
+  <Import Project="Directory.Build.props.user" Condition="Exists('Directory.Build.props.user')"/>
+
+  <PropertyGroup>
+    <!-- Absolute path so it's correct regardless of where msbuild is invoked from. -->
+    <KSPBT_ModRoot>$(MSBuildThisFileDirectory)GameData/RemoteTechMapFix/</KSPBT_ModRoot>
+    <KSPBT_ModPluginFolder>Plugins</KSPBT_ModPluginFolder>
+    <!-- Locally RemoteTech and Harmony are pre-installed in the game; no CKAN install. -->
+    <KSPBT_InstallCKANDependencies>false</KSPBT_InstallCKANDependencies>
+  </PropertyGroup>
+
+</Project>
