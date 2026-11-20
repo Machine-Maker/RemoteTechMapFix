@@ -1,0 +1,98 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*.*.*']
+
+jobs:
+  release:
+    # Pinned, not ubuntu-latest: CKAN's .deb needs mono-runtime, which ubuntu-26.04 doesn't ship.
+    # Matches the image KSPBuildTools' reusable build workflow uses.
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+
+    steps:
+      # fetch-depth 0 so MinVer can walk the full tag history
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # compile action does NOT call setup-dotnet — must do it ourselves
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.x'
+
+      - uses: KSPModdingLibs/KSPBuildTools/.github/actions/setup-ckan@1.1.1
+
+      - uses: KSPModdingLibs/KSPBuildTools/.github/actions/install-dependencies@1.1.1
+        with:
+          dependency-identifiers: 'RemoteTech Harmony2'
+
+      - uses: KSPModdingLibs/KSPBuildTools/.github/actions/compile@1.1.1
+
+      - uses: KSPModdingLibs/KSPBuildTools/.github/actions/assemble-release@1.1.1
+        id: assemble
+        with:
+          # Names both the zip and its top-level folder: RemoteTechMapFix-vX.Y.Z/GameData/RemoteTechMapFix/
+          output-file-name: 'RemoteTechMapFix-${{ github.ref_name }}'
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: 'RemoteTechMapFix ${{ github.ref_name }}'
+          files: |
+            ${{ steps.assemble.outputs.artifact-zip-path }}
+            GameData/RemoteTechMapFix/RemoteTechMapFix.version
+          body: |
+            ## Installation
+            Install via CKAN (add the [Machine-Maker mods repository](https://github.com/Machine-Maker/KSP-Mods-CKAN)),
+            or copy the zip's `GameData/RemoteTechMapFix/` folder into your KSP `GameData/` folder.
+
+            **Dependencies** (CKAN installs these automatically):
+            - RemoteTech
+            - 000_Harmony
+
+      - name: Publish to CKAN meta repo
+        env:
+          GH_TOKEN: ${{ secrets.CKAN_META_TOKEN }}
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          ZIP_PATH="${{ steps.assemble.outputs.artifact-zip-path }}"
+          ZIP_NAME="$(basename "$ZIP_PATH")"
+          # CKAN compares download_hash case-sensitively against uppercase hex; sha256sum prints lowercase
+          SHA256=$(sha256sum "$ZIP_PATH" | cut -d' ' -f1 | tr 'a-f' 'A-F')
+          SIZE=$(stat -c%s "$ZIP_PATH")
+
+          git clone https://x-access-token:${GH_TOKEN}@github.com/Machine-Maker/KSP-Mods-CKAN.git /tmp/ckan-meta
+
+          cat > "/tmp/ckan-meta/RemoteTechMapFix-${VERSION}.ckan" <<EOF
+          {
+            "spec_version": "v1.4",
+            "identifier":   "RemoteTechMapFix",
+            "name":         "RemoteTechMapFix",
+            "abstract":     "Fixes RemoteTech's zoomed-out map lines and cones: vanishing on tall screens, 180° flips, phantom cones",
+            "author":       [ "Machine-Maker" ],
+            "license":      "MIT",
+            "version":      "${VERSION}",
+            "ksp_version_min": "1.8",
+            "ksp_version_max": "1.12.5",
+            "download":      "https://github.com/Machine-Maker/RemoteTechMapFix/releases/download/${GITHUB_REF_NAME}/${ZIP_NAME}",
+            "download_size": ${SIZE},
+            "download_hash": { "sha256": "${SHA256}" },
+            "depends": [
+              { "name": "RemoteTech" },
+              { "name": "Harmony2" }
+            ],
+            "install": [
+              { "find": "GameData/RemoteTechMapFix", "install_to": "GameData" }
+            ]
+          }
+          EOF
+
+          cd /tmp/ckan-meta
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add "RemoteTechMapFix-${VERSION}.ckan"
+          git commit -m "Add RemoteTechMapFix ${VERSION}"
+          git push

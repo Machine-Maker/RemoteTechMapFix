@@ -1,6 +1,6 @@
 # RemoteTech Map Fix
 
-A tiny KSP 1.12 mod that fixes two bugs in **RemoteTech 1.9.12's zoomed-out map rendering**:
+A tiny KSP 1.12 mod that fixes three bugs in **RemoteTech 1.9.12's zoomed-out map rendering**:
 
 1. Lines and cones **vanish** when zoomed out on tall screens (4K, or any window taller than
    about 2000 px).
@@ -94,7 +94,12 @@ RemoteTech (tested in game with 1.9.12) and Harmony (`000_Harmony`).
 
 ## Install
 
-Copy `GameData/RemoteTechMapFix/` into your KSP `GameData/`.
+Via CKAN: add the meta repo with
+`ckan repo add Machine-Maker-Mods https://github.com/Machine-Maker/KSP-Mods-CKAN/archive/main.tar.gz`,
+then `ckan install RemoteTechMapFix`.
+
+Manually: the release zip holds `RemoteTechMapFix-vX.Y.Z/GameData/RemoteTechMapFix/`. Copy that
+`GameData/RemoteTechMapFix/` into your KSP `GameData/`.
 
 ## Building
 
@@ -108,9 +113,16 @@ dotnet build RemoteTechMapFix.csproj -c Release
 The DLL goes to `GameData/RemoteTechMapFix/Plugins/` in the repo, and into the install's
 GameData when `KSPBT_GameRoot` is set. Versions come from `v*.*.*` git tags (MinVer).
 
+CI builds every push against the CKAN-released RemoteTech and Harmony2. Pushing a `v*.*.*` tag
+runs the release workflow (`.github/workflows/release.yml`). It attaches
+`RemoteTechMapFix-vX.Y.Z.zip` and `RemoteTechMapFix.version` to a GitHub release, and commits a
+`.ckan` file to the [KSP-Mods-CKAN](https://github.com/Machine-Maker/KSP-Mods-CKAN) meta repo.
+That last step needs the `CKAN_META_TOKEN` repo secret: a token with Contents write access to
+KSP-Mods-CKAN.
+
 ## Upstream
 
-Both fixes belong in RemoteTech. For bug 1, use a depth inside the vector camera's clip range,
+All three fixes belong in RemoteTech. For bug 1, use a depth inside the vector camera's clip range,
 or map the 2D points through `vectorCam.ScreenToWorldPoint`. For bug 2, clip at the near plane
 instead of `FlipDirection`. For bug 3, deactivate skipped cones and destroy the GameObject, not
 the component. The `develop` Burst rewrite keeps the same 2D depth (bug 1). Its

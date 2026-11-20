@@ -51,4 +51,9 @@ GameData/RemoteTechMapFix/  packaging root (Plugins/ and .version are build outp
   zoom out past the 2D switch. No cones should appear away from real vessels.
 - Versioning comes from `v*.*.*` git tags via MinVer (`MinVerTagPrefix=v`). Don't set `<Version>`
   on the `KSPVersionFile` item. KSPBuildTools fills it from `$(FileVersion)`.
-- No CI and no git remote yet.
+- CI: `build.yml` (every branch push and PR) and `release.yml` (`v*.*.*` tags) compile against
+  the **CKAN-released** RemoteTech/Harmony2, not your local install. The release workflow is a
+  copy of `../MechJebRTBridge`'s. Keep the two in step, and see that repo's AGENTS.md for why
+  it pins `ubuntu-24.04`, uppercases the SHA256, and uses `"find": "GameData/RemoteTechMapFix"`.
+- The CKAN publish step pushes to `Machine-Maker/KSP-Mods-CKAN` (branch `main`) using the
+  `CKAN_META_TOKEN` secret.
