@@ -55,5 +55,5 @@ GameData/RemoteTechMapFix/  packaging root (Plugins/ and .version are build outp
   the **CKAN-released** RemoteTech/Harmony2, not your local install. The release workflow is a
   copy of `../MechJebRTBridge`'s. Keep the two in step, and see that repo's AGENTS.md for why
   it pins `ubuntu-24.04`, uppercases the SHA256, and uses `"find": "GameData/RemoteTechMapFix"`.
-- The CKAN publish step pushes to `Machine-Maker/KSP-Mods-CKAN` (branch `main`) using the
+- The CKAN publish step pushes to `MinmusMachineWorks/KSP-Mods-CKAN` (branch `main`) using the
   `CKAN_META_TOKEN` secret.

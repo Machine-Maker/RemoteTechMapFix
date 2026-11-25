@@ -95,7 +95,7 @@ RemoteTech (tested in game with 1.9.12) and Harmony (`000_Harmony`).
 ## Install
 
 Via CKAN: add the meta repo with
-`ckan repo add Machine-Maker-Mods https://github.com/Machine-Maker/KSP-Mods-CKAN/archive/main.tar.gz`,
+`ckan repo add MinmusMachineWorks https://github.com/MinmusMachineWorks/KSP-Mods-CKAN/archive/main.tar.gz`,
 then `ckan install RemoteTechMapFix`.
 
 Manually: the release zip holds `RemoteTechMapFix-vX.Y.Z/GameData/RemoteTechMapFix/`. Copy that
@@ -116,7 +116,7 @@ GameData when `KSPBT_GameRoot` is set. Versions come from `v*.*.*` git tags (Min
 CI builds every push against the CKAN-released RemoteTech and Harmony2. Pushing a `v*.*.*` tag
 runs the release workflow (`.github/workflows/release.yml`). It attaches
 `RemoteTechMapFix-vX.Y.Z.zip` and `RemoteTechMapFix.version` to a GitHub release, and commits a
-`.ckan` file to the [KSP-Mods-CKAN](https://github.com/Machine-Maker/KSP-Mods-CKAN) meta repo.
+`.ckan` file to the [KSP-Mods-CKAN](https://github.com/MinmusMachineWorks/KSP-Mods-CKAN) meta repo.
 That last step needs the `CKAN_META_TOKEN` repo secret: a token with Contents write access to
 KSP-Mods-CKAN.
 

@@ -33,8 +33,8 @@
   <ItemGroup>
     <KSPVersionFile Include=".">
       <Destination>$(KSPBT_ModRoot)RemoteTechMapFix.version</Destination>
-      <URL>https://github.com/Machine-Maker/RemoteTechMapFix/releases/latest/download/RemoteTechMapFix.version</URL>
-      <Download>https://github.com/Machine-Maker/RemoteTechMapFix/releases/latest</Download>
+      <URL>https://github.com/MinmusMachineWorks/RemoteTechMapFix/releases/latest/download/RemoteTechMapFix.version</URL>
+      <Download>https://github.com/MinmusMachineWorks/RemoteTechMapFix/releases/latest</Download>
       <KSP_Version>1.12</KSP_Version>
       <KSP_Version_Min>1.8</KSP_Version_Min>
       <KSP_Version_Max>1.12</KSP_Version_Max>
