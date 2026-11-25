@@ -51,9 +51,12 @@ GameData/RemoteTechMapFix/  packaging root (Plugins/ and .version are build outp
   zoom out past the 2D switch. No cones should appear away from real vessels.
 - Versioning comes from `v*.*.*` git tags via MinVer (`MinVerTagPrefix=v`). Don't set `<Version>`
   on the `KSPVersionFile` item. KSPBuildTools fills it from `$(FileVersion)`.
-- CI: `build.yml` (every branch push and PR) and `release.yml` (`v*.*.*` tags) compile against
-  the **CKAN-released** RemoteTech/Harmony2, not your local install. The release workflow is a
-  copy of `../MechJebRTBridge`'s. Keep the two in step, and see that repo's AGENTS.md for why
-  it pins `ubuntu-24.04`, uppercases the SHA256, and uses `"find": "GameData/RemoteTechMapFix"`.
-- The CKAN publish step pushes to `MinmusMachineWorks/KSP-Mods-CKAN` (branch `main`) using the
-  `CKAN_META_TOKEN` secret.
+- CI: `release.yml` runs on every branch push, PR and `v*.*.*` tag. Its `build` job compiles
+  against the **CKAN-released** RemoteTech/Harmony2, not your local install (pinned to
+  `ubuntu-24.04` because CKAN's `.deb` needs `mono-runtime`). The `release` job calls the shared
+  `MinmusMachineWorks/KSP-Mods-CKAN/.github/workflows/release-mod.yml`, which packages the zip,
+  validates the `.ckan`, and on a tag creates the GitHub release and publishes
+  `RemoteTechMapFix/RemoteTechMapFix-X.Y.Z.ckan` (org secret `CKAN_META_TOKEN`). It matches
+  `../MechJebRTBridge`'s `release.yml` apart from names and dependencies; keep the two in step.
+- CKAN metadata lives in `ckan/metadata.json`. Change dependencies there **and** in the
+  `install-dependencies` step of `release.yml`.

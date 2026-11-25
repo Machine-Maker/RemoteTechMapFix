@@ -98,8 +98,8 @@ Via CKAN: add the meta repo with
 `ckan repo add MinmusMachineWorks https://github.com/MinmusMachineWorks/KSP-Mods-CKAN/archive/main.tar.gz`,
 then `ckan install RemoteTechMapFix`.
 
-Manually: the release zip holds `RemoteTechMapFix-vX.Y.Z/GameData/RemoteTechMapFix/`. Copy that
-`GameData/RemoteTechMapFix/` into your KSP `GameData/`.
+Manually: the release zip holds `GameData/RemoteTechMapFix/`, plus `LICENSE` and `README.md`. Unzip it
+into your KSP folder so its `GameData/` merges with yours.
 
 ## Building
 
@@ -113,12 +113,15 @@ dotnet build RemoteTechMapFix.csproj -c Release
 The DLL goes to `GameData/RemoteTechMapFix/Plugins/` in the repo, and into the install's
 GameData when `KSPBT_GameRoot` is set. Versions come from `v*.*.*` git tags (MinVer).
 
-CI builds every push against the CKAN-released RemoteTech and Harmony2. Pushing a `v*.*.*` tag
-runs the release workflow (`.github/workflows/release.yml`). It attaches
-`RemoteTechMapFix-vX.Y.Z.zip` and `RemoteTechMapFix.version` to a GitHub release, and commits a
-`.ckan` file to the [KSP-Mods-CKAN](https://github.com/MinmusMachineWorks/KSP-Mods-CKAN) meta repo.
-That last step needs the `CKAN_META_TOKEN` repo secret: a token with Contents write access to
-KSP-Mods-CKAN.
+Every push and pull request runs `.github/workflows/release.yml`. It builds against the
+CKAN-released RemoteTech and Harmony2, packages the zip and validates its `.ckan` against the CKAN schema, and
+uploads both as an artifact (a dry run). Pushing a `v*.*.*` tag does the same, then attaches
+`RemoteTechMapFix-vX.Y.Z.zip` and `RemoteTechMapFix.version` to a GitHub release and commits
+`RemoteTechMapFix/RemoteTechMapFix-X.Y.Z.ckan` to the [KSP-Mods-CKAN](https://github.com/MinmusMachineWorks/KSP-Mods-CKAN) meta repo.
+Packaging and publishing are done by that repo's shared `release-mod.yml` workflow. The CKAN
+metadata (everything except the per-release fields) is in `ckan/metadata.json`. The annotated
+tag's message becomes the top of the release notes. Publishing needs the `CKAN_META_TOKEN` org
+secret: a token with Contents write access to KSP-Mods-CKAN.
 
 ## Upstream
 

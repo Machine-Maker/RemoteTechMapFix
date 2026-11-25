@@ -2,7 +2,7 @@
 
   <!--
     KSPBuildTools already copies the DLL to $(KSPBT_ModRoot)/$(KSPBT_ModPluginFolder)/
-    (the repo's GameData — what assemble-release zips up).
+    (the repo's GameData — what the release workflow packages).
     This target handles the second copy: the live KSP install for local dev.
     Skipped in CI where KSPBT_GameRoot is the fake /tmp/ksp instance (no need to re-deploy there).
   -->

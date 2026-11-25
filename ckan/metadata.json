@@ -1,0 +1,32 @@
+{
+  "spec_version": "v1.4",
+  "identifier": "RemoteTechMapFix",
+  "name": "RemoteTechMapFix",
+  "abstract": "Fixes RemoteTech's zoomed-out map lines and cones: vanishing on tall screens, 180° flips, phantom cones",
+  "author": [
+    "Machine-Maker"
+  ],
+  "license": "MIT",
+  "ksp_version_min": "1.8",
+  "ksp_version_max": "1.12.5",
+  "depends": [
+    {
+      "name": "RemoteTech"
+    },
+    {
+      "name": "Harmony2"
+    }
+  ],
+  "install": [
+    {
+      "find": "GameData/RemoteTechMapFix",
+      "install_to": "GameData"
+    }
+  ],
+  "release_status": "stable",
+  "resources": {
+    "homepage": "https://github.com/MinmusMachineWorks/RemoteTechMapFix",
+    "repository": "https://github.com/MinmusMachineWorks/RemoteTechMapFix",
+    "bugtracker": "https://github.com/MinmusMachineWorks/RemoteTechMapFix/issues"
+  }
+}
